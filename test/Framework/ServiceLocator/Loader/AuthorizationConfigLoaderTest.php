@@ -6,7 +6,6 @@ namespace ExtendsFramework\Authorization\Framework\ServiceLocator\Loader;
 use ExtendsFramework\Authorization\AuthorizerInterface;
 use ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware;
 use ExtendsFramework\Authorization\Framework\ServiceLocator\Factory\AuthorizerFactory;
-use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
 use ExtendsFramework\ServiceLocator\Resolver\Factory\FactoryResolver;
 use ExtendsFramework\ServiceLocator\Resolver\Reflection\ReflectionResolver;
 use ExtendsFramework\ServiceLocator\ServiceLocatorInterface;
@@ -33,9 +32,6 @@ class AuthorizationConfigLoaderTest extends TestCase
                 ReflectionResolver::class => [
                     NotAuthorizedMiddleware::class => NotAuthorizedMiddleware::class,
                 ],
-            ],
-            MiddlewareChainInterface::class => [
-                NotAuthorizedMiddleware::class => 140,
             ],
             AuthorizerInterface::class => [
                 'realms' => [],
