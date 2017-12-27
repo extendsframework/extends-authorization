@@ -62,7 +62,7 @@ class Permission implements PermissionInterface
      */
     public function implies(PermissionInterface $permission): bool
     {
-        if (!$permission instanceof static) {
+        if (! $permission instanceof static) {
             return false;
         }
 
@@ -74,7 +74,8 @@ class Permission implements PermissionInterface
                 return true;
             }
 
-            if (array_intersect($section, $left[$index]) === [] && in_array($this->wildcard, $left[$index], true) === false) {
+            if (array_intersect($section, $left[$index]) === []
+                && in_array($this->wildcard, $left[$index], true) === false) {
                 return false;
             }
         }
@@ -98,7 +99,6 @@ class Permission implements PermissionInterface
         $sections = explode($this->divider, $this->notation);
         foreach ($sections as $index => $section) {
             $sections[$index] = explode($this->separator, $section);
-
         }
 
         return $sections;
