@@ -18,9 +18,12 @@ class PdoRealmTest extends TestCase
      * Test that permissions and roles will be loaded from PDO instance.
      *
      * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::__construct()
-     * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getAuthorizationInfo()
      * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::addPermissions()
      * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::addRoles()
+     * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getAuthorizationInfo()
+     * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getPdo()
+     * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getPermissionsQuery()
+     * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getRolesQuery()
      */
     public function testGetAuthorizationInfo()
     {

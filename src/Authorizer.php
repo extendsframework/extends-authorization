@@ -96,7 +96,7 @@ class Authorizer implements AuthorizerInterface
      */
     protected function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
     {
-        foreach ($this->realms as $realm) {
+        foreach ($this->getRealms() as $realm) {
             $info = $realm->getAuthorizationInfo($identity);
             if ($info instanceof AuthorizationInfoInterface) {
                 return $info;
@@ -104,5 +104,15 @@ class Authorizer implements AuthorizerInterface
         }
 
         return new AuthorizationInfo();
+    }
+
+    /**
+     * Get realms.
+     *
+     * @return RealmInterface[]
+     */
+    protected function getRealms(): array
+    {
+        return $this->realms;
     }
 }

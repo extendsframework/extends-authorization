@@ -50,7 +50,7 @@ class Permission implements PermissionInterface
      */
     public function __construct(string $notation)
     {
-        if ((bool)preg_match($this->pattern, $notation) === false) {
+        if ((bool)preg_match($this->getPattern(), $notation) === false) {
             throw new InvalidPermissionNotation($notation);
         }
 
@@ -68,6 +68,7 @@ class Permission implements PermissionInterface
 
         $left = $this->getSections();
         $right = $permission->getSections();
+        $wildcard = $this->getWildcard();
 
         foreach ($right as $index => $section) {
             if (array_key_exists($index, $left) === false) {
@@ -75,13 +76,13 @@ class Permission implements PermissionInterface
             }
 
             if (array_intersect($section, $left[$index]) === []
-                && in_array($this->wildcard, $left[$index], true) === false) {
+                && in_array($wildcard, $left[$index], true) === false) {
                 return false;
             }
         }
 
         foreach (array_slice($left, count($right)) as $section) {
-            if (in_array($this->wildcard, $section, true) === false) {
+            if (in_array($wildcard, $section, true) === false) {
                 return false;
             }
         }
@@ -96,11 +97,61 @@ class Permission implements PermissionInterface
      */
     protected function getSections(): array
     {
-        $sections = explode($this->divider, $this->notation);
+        $sections = explode($this->getDivider(), $this->getNotation());
         foreach ($sections as $index => $section) {
-            $sections[$index] = explode($this->separator, $section);
+            $sections[$index] = explode($this->getSeparator(), $section);
         }
 
         return $sections;
+    }
+
+    /**
+     * Get wildcard.
+     *
+     * @return string
+     */
+    protected function getWildcard(): string
+    {
+        return $this->wildcard;
+    }
+
+    /**
+     * Get divider.
+     *
+     * @return string
+     */
+    protected function getDivider(): string
+    {
+        return $this->divider;
+    }
+
+    /**
+     * Get separator.
+     *
+     * @return string
+     */
+    protected function getSeparator(): string
+    {
+        return $this->separator;
+    }
+
+    /**
+     * Get notation.
+     *
+     * @return string
+     */
+    protected function getNotation(): string
+    {
+        return $this->notation;
+    }
+
+    /**
+     * Get pattern.
+     *
+     * @return string
+     */
+    protected function getPattern(): string
+    {
+        return $this->pattern;
     }
 }

@@ -88,7 +88,9 @@ class PdoRealm implements RealmInterface
      */
     protected function addPermissions(IdentityInterface $identity, AuthorizationInfo $info): PdoRealm
     {
-        $statement = $this->pdo->prepare($this->permissionsQuery);
+        $statement = $this
+            ->getPdo()
+            ->prepare($this->getPermissionsQuery());
         $statement->execute([
             $identity->getIdentifier(),
             $identity->getIdentifier(),
@@ -112,7 +114,9 @@ class PdoRealm implements RealmInterface
      */
     protected function addRoles(IdentityInterface $identity, AuthorizationInfo $info): PdoRealm
     {
-        $statement = $this->pdo->prepare($this->rolesQuery);
+        $statement = $this
+            ->getPdo()
+            ->prepare($this->getRolesQuery());
         $statement->execute([
             $identity->getIdentifier(),
         ]);
@@ -124,5 +128,35 @@ class PdoRealm implements RealmInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Get pdo.
+     *
+     * @return PDO
+     */
+    protected function getPdo(): PDO
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * Get permissions query.
+     *
+     * @return string
+     */
+    protected function getPermissionsQuery(): string
+    {
+        return $this->permissionsQuery;
+    }
+
+    /**
+     * Get roles query.
+     *
+     * @return string
+     */
+    protected function getRolesQuery(): string
+    {
+        return $this->rolesQuery;
     }
 }

@@ -13,8 +13,13 @@ class PermissionTest extends TestCase
      * Test that implies method will return correct boolean.
      *
      * @covers \ExtendsFramework\Authorization\Permission\Permission::__construct()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getPattern()
      * @covers \ExtendsFramework\Authorization\Permission\Permission::implies()
      * @covers \ExtendsFramework\Authorization\Permission\Permission::getSections()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getWildcard()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getSeparator()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getNotation()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getDivider()
      */
     public function testImpliesExactMatches(): void
     {
@@ -42,6 +47,7 @@ class PermissionTest extends TestCase
      * Test that an invalid permission notation is not allowed.
      *
      * @covers                   \ExtendsFramework\Authorization\Permission\Permission::__construct()
+     * @covers                   \ExtendsFramework\Authorization\Permission\Permission::getPattern()
      * @covers                   \ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation::__construct()
      * @expectedException        \ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation
      * @expectedExceptionMessage Invalid permission notation detected, got "foo,:bar".
@@ -57,6 +63,7 @@ class PermissionTest extends TestCase
      * Test that permission can not imply other instance of PermissionInterface.
      *
      * @covers \ExtendsFramework\Authorization\Permission\Permission::__construct()
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::getPattern()
      * @covers \ExtendsFramework\Authorization\Permission\Permission::implies()
      */
     public function testNotSameInstance(): void
