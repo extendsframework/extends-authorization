@@ -17,7 +17,7 @@ class Role implements RoleInterface
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
