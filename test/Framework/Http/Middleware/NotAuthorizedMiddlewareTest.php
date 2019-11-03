@@ -21,7 +21,6 @@ class NotAuthorizedMiddlewareTest extends TestCase
      *
      * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware::__construct()
      * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware::process()
-     * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware::getLogger()
      */
     public function testProcess(): void
     {

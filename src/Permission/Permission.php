@@ -12,35 +12,35 @@ class Permission implements PermissionInterface
      *
      * @var string
      */
-    protected $wildcard = '*';
+    private $wildcard = '*';
 
     /**
      * Character to divide notation sections.
      *
      * @var string
      */
-    protected $divider = ':';
+    private $divider = ':';
 
     /**
      * Character to divide parts in a section.
      *
      * @var string
      */
-    protected $separator = ',';
+    private $separator = ',';
 
     /**
      * Permission notation.
      *
      * @var string
      */
-    protected $notation;
+    private $notation;
 
     /**
      * Case sensitive regular expression to verify notation.
      *
      * @var string
      */
-    protected $pattern = '/^(\*|\w+(,\w+)*)(:(\*|\w+(,\w+)*))*$/';
+    private $pattern = '/^(\*|\w+(,\w+)*)(:(\*|\w+(,\w+)*))*$/';
 
     /**
      * Permission constructor.
@@ -50,7 +50,7 @@ class Permission implements PermissionInterface
      */
     public function __construct(string $notation)
     {
-        if ((bool)preg_match($this->getPattern(), $notation) === false) {
+        if (!(bool)preg_match($this->pattern, $notation)) {
             throw new InvalidPermissionNotation($notation);
         }
 
@@ -62,27 +62,26 @@ class Permission implements PermissionInterface
      */
     public function implies(PermissionInterface $permission): bool
     {
-        if (! $permission instanceof static) {
+        if (!$permission instanceof static) {
             return false;
         }
 
         $left = $this->getSections();
         $right = $permission->getSections();
-        $wildcard = $this->getWildcard();
+        $wildcard = $this->wildcard;
 
         foreach ($right as $index => $section) {
-            if (array_key_exists($index, $left) === false) {
+            if (!isset($left[$index])) {
                 return true;
             }
 
-            if (array_intersect($section, $left[$index]) === []
-                && in_array($wildcard, $left[$index], true) === false) {
+            if (array_intersect($section, $left[$index]) === [] && !in_array($wildcard, $left[$index], true)) {
                 return false;
             }
         }
 
         foreach (array_slice($left, count($right)) as $section) {
-            if (in_array($wildcard, $section, true) === false) {
+            if (!in_array($wildcard, $section, true)) {
                 return false;
             }
         }
@@ -95,63 +94,13 @@ class Permission implements PermissionInterface
      *
      * @return array
      */
-    protected function getSections(): array
+    private function getSections(): array
     {
-        $sections = explode($this->getDivider(), $this->getNotation());
+        $sections = explode($this->divider, $this->notation);
         foreach ($sections as $index => $section) {
-            $sections[$index] = explode($this->getSeparator(), $section);
+            $sections[$index] = explode($this->separator, $section);
         }
 
         return $sections;
-    }
-
-    /**
-     * Get wildcard.
-     *
-     * @return string
-     */
-    protected function getWildcard(): string
-    {
-        return $this->wildcard;
-    }
-
-    /**
-     * Get divider.
-     *
-     * @return string
-     */
-    protected function getDivider(): string
-    {
-        return $this->divider;
-    }
-
-    /**
-     * Get separator.
-     *
-     * @return string
-     */
-    protected function getSeparator(): string
-    {
-        return $this->separator;
-    }
-
-    /**
-     * Get notation.
-     *
-     * @return string
-     */
-    protected function getNotation(): string
-    {
-        return $this->notation;
-    }
-
-    /**
-     * Get pattern.
-     *
-     * @return string
-     */
-    protected function getPattern(): string
-    {
-        return $this->pattern;
     }
 }

@@ -19,7 +19,6 @@ class AuthorizerFactoryTest extends TestCase
      * Test that instance of AuthorizerInterface will be created.
      *
      * @covers \ExtendsFramework\Authorization\Framework\ServiceLocator\Factory\AuthorizerFactory::createService()
-     * @covers \ExtendsFramework\Authorization\Framework\ServiceLocator\Factory\AuthorizerFactory::createRealm()
      */
     public function testCreateService(): void
     {

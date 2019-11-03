@@ -18,7 +18,6 @@ class AuthorizerTest extends TestCase
      *
      * @covers \ExtendsFramework\Authorization\Authorizer::addRealm()
      * @covers \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers \ExtendsFramework\Authorization\Authorizer::getRealms()
      * @covers \ExtendsFramework\Authorization\Authorizer::isPermitted()
      */
     public function testIsPermitted(): void
@@ -67,7 +66,6 @@ class AuthorizerTest extends TestCase
      *
      * @covers                   \ExtendsFramework\Authorization\Authorizer::addRealm()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::getRealms()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::isPermitted()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::checkPermission()
      * @covers                   \ExtendsFramework\Authorization\Exception\IdentityNotPermitted::__construct
@@ -122,7 +120,6 @@ class AuthorizerTest extends TestCase
      *
      * @covers \ExtendsFramework\Authorization\Authorizer::addRealm()
      * @covers \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers \ExtendsFramework\Authorization\Authorizer::getRealms()
      * @covers \ExtendsFramework\Authorization\Authorizer::hasRole()
      */
     public function testHasRole(): void
@@ -171,7 +168,6 @@ class AuthorizerTest extends TestCase
      *
      * @covers                   \ExtendsFramework\Authorization\Authorizer::addRealm()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::getRealms()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::hasRole()
      * @covers                   \ExtendsFramework\Authorization\Authorizer::checkRole()
      * @covers                   \ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole::__construct
@@ -226,7 +222,6 @@ class AuthorizerTest extends TestCase
      *
      * @covers \ExtendsFramework\Authorization\Authorizer::addRealm()
      * @covers \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers \ExtendsFramework\Authorization\Authorizer::getRealms()
      * @covers \ExtendsFramework\Authorization\Authorizer::hasRole()
      */
     public function testNoAuthorizationInfo(): void

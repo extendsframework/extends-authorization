@@ -13,14 +13,14 @@ class AuthorizationInfo implements AuthorizationInfoInterface
      *
      * @var PermissionInterface[]
      */
-    protected $permissions = [];
+    private $permissions = [];
 
     /**
      * Authorization info $roles.
      *
      * @var RoleInterface[]
      */
-    protected $roles = [];
+    private $roles = [];
 
     /**
      * @inheritDoc

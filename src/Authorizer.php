@@ -17,7 +17,7 @@ class Authorizer implements AuthorizerInterface
      *
      * @var RealmInterface[]
      */
-    protected $realms = [];
+    private $realms = [];
 
     /**
      * @inheritDoc
@@ -26,7 +26,7 @@ class Authorizer implements AuthorizerInterface
     {
         $info = $this->getAuthorizationInfo($identity);
         foreach ($info->getPermissions() as $ownPermission) {
-            if ($ownPermission->implies($permission) === true) {
+            if ($ownPermission->implies($permission)) {
                 return true;
             }
         }
@@ -39,7 +39,7 @@ class Authorizer implements AuthorizerInterface
      */
     public function checkPermission(IdentityInterface $identity, PermissionInterface $permission): AuthorizerInterface
     {
-        if ($this->isPermitted($identity, $permission) === false) {
+        if (!$this->isPermitted($identity, $permission)) {
             throw new IdentityNotPermitted();
         }
 
@@ -53,7 +53,7 @@ class Authorizer implements AuthorizerInterface
     {
         $info = $this->getAuthorizationInfo($identity);
         foreach ($info->getRoles() as $ownRole) {
-            if ($ownRole->isEqual($role) === true) {
+            if ($ownRole->isEqual($role)) {
                 return true;
             }
         }
@@ -66,7 +66,7 @@ class Authorizer implements AuthorizerInterface
      */
     public function checkRole(IdentityInterface $identity, RoleInterface $role): AuthorizerInterface
     {
-        if ($this->hasRole($identity, $role) === false) {
+        if (!$this->hasRole($identity, $role)) {
             throw new IdentityNotAssignedToRole();
         }
 
@@ -94,9 +94,9 @@ class Authorizer implements AuthorizerInterface
      * @param IdentityInterface $identity
      * @return AuthorizationInfoInterface
      */
-    protected function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
+    private function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
     {
-        foreach ($this->getRealms() as $realm) {
+        foreach ($this->realms as $realm) {
             $info = $realm->getAuthorizationInfo($identity);
             if ($info instanceof AuthorizationInfoInterface) {
                 return $info;
@@ -104,15 +104,5 @@ class Authorizer implements AuthorizerInterface
         }
 
         return new AuthorizationInfo();
-    }
-
-    /**
-     * Get realms.
-     *
-     * @return RealmInterface[]
-     */
-    protected function getRealms(): array
-    {
-        return $this->realms;
     }
 }

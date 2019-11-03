@@ -18,43 +18,7 @@ class PdoRealm implements RealmInterface
      *
      * @var PDO
      */
-    protected $pdo;
-
-    /**
-     * Identity permissions query.
-     *
-     * @var string
-     */
-    protected $permissionsQuery = '
-        SELECT p.*
-        FROM permission AS p
-        INNER JOIN identity_permission AS ip USING (permission_id)
-        INNER JOIN identity AS i USING (identity_id)
-        WHERE i.identifier = ?
-        
-        UNION DISTINCT
-        
-        SELECT p.*
-        FROM permission AS p
-        INNER JOIN role_permission AS rp USING (permission_id)
-        INNER JOIN role AS r USING (role_id)
-        INNER JOIN identity_role AS ir USING (role_id)
-        INNER JOIN identity AS i USING (identity_id)
-        WHERE i.identifier = ?
-    ';
-
-    /**
-     * Identity roles query.
-     *
-     * @var string
-     */
-    protected $rolesQuery = '
-        SELECT r.*
-        FROM role AS r
-        INNER JOIN identity_role AS ir USING (role_id)
-        INNER JOIN identity AS i USING (identity_id)
-        WHERE i.identifier = ?
-    ';
+    private $pdo;
 
     /**
      * PdoRealm constructor.
@@ -72,25 +36,24 @@ class PdoRealm implements RealmInterface
     public function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
     {
         $info = new AuthorizationInfo();
-        $this
-            ->addPermissions($identity, $info)
-            ->addRoles($identity, $info);
 
-        return $info;
-    }
-
-    /**
-     * Add permissions for $identity to $info.
-     *
-     * @param IdentityInterface $identity
-     * @param AuthorizationInfo $info
-     * @return PdoRealm
-     */
-    protected function addPermissions(IdentityInterface $identity, AuthorizationInfo $info): PdoRealm
-    {
-        $statement = $this
-            ->getPdo()
-            ->prepare($this->getPermissionsQuery());
+        $statement = $this->pdo->prepare('
+            SELECT p.*
+            FROM permission AS p
+            INNER JOIN identity_permission AS ip USING (permission_id)
+            INNER JOIN identity AS i USING (identity_id)
+            WHERE i.identifier = ?
+            
+            UNION DISTINCT
+            
+            SELECT p.*
+            FROM permission AS p
+            INNER JOIN role_permission AS rp USING (permission_id)
+            INNER JOIN role AS r USING (role_id)
+            INNER JOIN identity_role AS ir USING (role_id)
+            INNER JOIN identity AS i USING (identity_id)
+            WHERE i.identifier = ?
+        ');
         $statement->execute([
             $identity->getIdentifier(),
             $identity->getIdentifier(),
@@ -102,21 +65,13 @@ class PdoRealm implements RealmInterface
             );
         }
 
-        return $this;
-    }
-
-    /**
-     * Add roles for $identity to $info.
-     *
-     * @param IdentityInterface $identity
-     * @param AuthorizationInfo $info
-     * @return PdoRealm
-     */
-    protected function addRoles(IdentityInterface $identity, AuthorizationInfo $info): PdoRealm
-    {
-        $statement = $this
-            ->getPdo()
-            ->prepare($this->getRolesQuery());
+        $statement = $this->pdo->prepare('
+            SELECT r.*
+            FROM role AS r
+            INNER JOIN identity_role AS ir USING (role_id)
+            INNER JOIN identity AS i USING (identity_id)
+            WHERE i.identifier = ?
+        ');
         $statement->execute([
             $identity->getIdentifier(),
         ]);
@@ -127,36 +82,6 @@ class PdoRealm implements RealmInterface
             );
         }
 
-        return $this;
-    }
-
-    /**
-     * Get pdo.
-     *
-     * @return PDO
-     */
-    protected function getPdo(): PDO
-    {
-        return $this->pdo;
-    }
-
-    /**
-     * Get permissions query.
-     *
-     * @return string
-     */
-    protected function getPermissionsQuery(): string
-    {
-        return $this->permissionsQuery;
-    }
-
-    /**
-     * Get roles query.
-     *
-     * @return string
-     */
-    protected function getRolesQuery(): string
-    {
-        return $this->rolesQuery;
+        return $info;
     }
 }

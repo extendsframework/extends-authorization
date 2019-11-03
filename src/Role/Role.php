@@ -10,7 +10,7 @@ class Role implements RoleInterface
      *
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * Role constructor.
