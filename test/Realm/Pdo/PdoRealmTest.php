@@ -20,7 +20,7 @@ class PdoRealmTest extends TestCase
      * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::__construct()
      * @covers \ExtendsFramework\Authorization\Realm\Pdo\PdoRealm::getAuthorizationInfo()
      */
-    public function testGetAuthorizationInfo()
+    public function testGetAuthorizationInfo(): void
     {
         $identity = $this->createMock(IdentityInterface::class);
         $identity

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Authorization;
 
+use ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole;
+use ExtendsFramework\Authorization\Exception\IdentityNotPermitted;
 use ExtendsFramework\Authorization\Permission\PermissionInterface;
 use ExtendsFramework\Authorization\Realm\RealmInterface;
 use ExtendsFramework\Authorization\Role\RoleInterface;
@@ -64,16 +66,17 @@ class AuthorizerTest extends TestCase
      *
      * Test that permission is permitted for identity and an exception will be thrown.
      *
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::addRealm()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::isPermitted()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::checkPermission()
-     * @covers                   \ExtendsFramework\Authorization\Exception\IdentityNotPermitted::__construct
-     * @expectedException        \ExtendsFramework\Authorization\Exception\IdentityNotPermitted
-     * @expectedExceptionMessage Identity is not permitted by permission.
+     * @covers \ExtendsFramework\Authorization\Authorizer::addRealm()
+     * @covers \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
+     * @covers \ExtendsFramework\Authorization\Authorizer::isPermitted()
+     * @covers \ExtendsFramework\Authorization\Authorizer::checkPermission()
+     * @covers \ExtendsFramework\Authorization\Exception\IdentityNotPermitted::__construct
      */
     public function testCheckPermission(): void
     {
+        $this->expectException(IdentityNotPermitted::class);
+        $this->expectExceptionMessage('Identity is not permitted by permission.');
+
         $permission = $this->createMock(PermissionInterface::class);
         $permission
             ->expects($this->exactly(2))
@@ -166,16 +169,17 @@ class AuthorizerTest extends TestCase
      *
      * Test that identity does not have role and an exception will be thrown.
      *
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::addRealm()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::hasRole()
-     * @covers                   \ExtendsFramework\Authorization\Authorizer::checkRole()
-     * @covers                   \ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole::__construct
-     * @expectedException        \ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole
-     * @expectedExceptionMessage Identity is not assigned to role.
+     * @covers \ExtendsFramework\Authorization\Authorizer::addRealm()
+     * @covers \ExtendsFramework\Authorization\Authorizer::getAuthorizationInfo()
+     * @covers \ExtendsFramework\Authorization\Authorizer::hasRole()
+     * @covers \ExtendsFramework\Authorization\Authorizer::checkRole()
+     * @covers \ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole::__construct
      */
     public function testCheckRole(): void
     {
+        $this->expectException(IdentityNotAssignedToRole::class);
+        $this->expectExceptionMessage('Identity is not assigned to role.');
+
         $role = $this->createMock(RoleInterface::class);
         $role
             ->expects($this->exactly(2))

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Authorization\Permission;
 
+use ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation;
 use PHPUnit\Framework\TestCase;
 
 class PermissionTest extends TestCase
@@ -41,13 +42,14 @@ class PermissionTest extends TestCase
      *
      * Test that an invalid permission notation is not allowed.
      *
-     * @covers                   \ExtendsFramework\Authorization\Permission\Permission::__construct()
-     * @covers                   \ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation::__construct()
-     * @expectedException        \ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation
-     * @expectedExceptionMessage Invalid permission notation detected, got "foo,:bar".
+     * @covers \ExtendsFramework\Authorization\Permission\Permission::__construct()
+     * @covers \ExtendsFramework\Authorization\Permission\Exception\InvalidPermissionNotation::__construct()
      */
     public function testInvalidPermission(): void
     {
+        $this->expectException(InvalidPermissionNotation::class);
+        $this->expectExceptionMessage('Invalid permission notation detected, got "foo,:bar".');
+
         new Permission('foo,:bar');
     }
 
@@ -62,16 +64,5 @@ class PermissionTest extends TestCase
     public function testNotSameInstance(): void
     {
         $this->assertFalse((new Permission('*'))->implies(new PermissionStub()));
-    }
-}
-
-class PermissionStub implements PermissionInterface
-{
-    /**
-     * @inheritDoc
-     */
-    public function implies(PermissionInterface $permission): bool
-    {
-        return true;
     }
 }

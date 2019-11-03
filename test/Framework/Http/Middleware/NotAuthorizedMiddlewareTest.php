@@ -5,11 +5,8 @@ namespace ExtendsFramework\Authorization\Framework\Http\Middleware;
 
 use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
-use ExtendsFramework\Http\Response\ResponseInterface;
 use ExtendsFramework\Logger\LoggerInterface;
 use ExtendsFramework\Logger\Priority\PriorityInterface;
-use ExtendsFramework\Authorization\AuthorizationException;
-use LogicException;
 use PHPUnit\Framework\TestCase;
 
 class NotAuthorizedMiddlewareTest extends TestCase
@@ -50,13 +47,7 @@ class NotAuthorizedMiddlewareTest extends TestCase
         $middleware = new NotAuthorizedMiddleware($logger);
         $response = $middleware->process($request, $chain);
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
-        if ($response instanceof ResponseInterface) {
-            $this->assertSame(403, $response->getStatusCode());
-        }
+        $this->assertIsObject($response);
+        $this->assertSame(403, $response->getStatusCode());
     }
-}
-
-class AuthorizationExceptionStub extends LogicException implements AuthorizationException
-{
 }

@@ -3,11 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Authorization\Framework\ServiceLocator\Factory;
 
-use ExtendsFramework\Authorization\AuthorizationInfoInterface;
 use ExtendsFramework\Authorization\AuthorizerInterface;
-use ExtendsFramework\Authorization\Realm\RealmInterface;
-use ExtendsFramework\Identity\IdentityInterface;
-use ExtendsFramework\ServiceLocator\Resolver\StaticFactory\StaticFactoryInterface;
 use ExtendsFramework\ServiceLocator\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -32,9 +28,9 @@ class AuthorizerFactoryTest extends TestCase
                         [
                             'name' => AuthorizerRealmStub::class,
                             'options' => [
-                                'foo' => 'bar'
+                                'foo' => 'bar',
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ]);
@@ -52,24 +48,5 @@ class AuthorizerFactoryTest extends TestCase
         $authenticator = $factory->createService(AuthorizerInterface::class, $serviceLocator);
 
         $this->assertInstanceOf(AuthorizerInterface::class, $authenticator);
-    }
-}
-
-class AuthorizerRealmStub implements RealmInterface, StaticFactoryInterface
-{
-    /**
-     * @inheritDoc
-     */
-    public function getAuthorizationInfo(IdentityInterface $identity): ?AuthorizationInfoInterface
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function factory(string $key, ServiceLocatorInterface $serviceLocator, array $extra = null): object
-    {
-        return new static();
     }
 }
