@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ExtendsFramework\Authorization\Framework\Http\Middleware;
 
 use ExtendsFramework\Authorization\AuthorizationException;
+use ExtendsFramework\Authorization\Framework\ProblemDetails\ForbiddenProblemDetails;
 use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
 use ExtendsFramework\Http\Middleware\MiddlewareInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
@@ -12,7 +13,7 @@ use ExtendsFramework\Http\Response\ResponseInterface;
 use ExtendsFramework\Logger\LoggerInterface;
 use ExtendsFramework\Logger\Priority\Notice\NoticePriority;
 
-class NotAuthorizedMiddleware implements MiddlewareInterface
+class ForbiddenMiddleware implements MiddlewareInterface
 {
     /**
      * Logger.
@@ -22,7 +23,7 @@ class NotAuthorizedMiddleware implements MiddlewareInterface
     private $logger;
 
     /**
-     * NotAuthorizedMiddleware constructor.
+     * ForbiddenMiddleware constructor.
      *
      * @param LoggerInterface $logger
      */
@@ -44,7 +45,9 @@ class NotAuthorizedMiddleware implements MiddlewareInterface
                 $exception->getMessage()
             ), new NoticePriority());
 
-            return (new Response())->withStatusCode(403);
+            return (new Response())->withBody(
+                new ForbiddenProblemDetails($request)
+            );
         }
     }
 }

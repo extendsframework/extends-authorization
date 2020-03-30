@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace ExtendsFramework\Authorization\Framework\ServiceLocator\Loader;
 
 use ExtendsFramework\Authorization\AuthorizerInterface;
-use ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware;
+use ExtendsFramework\Authorization\Framework\Http\Middleware\ForbiddenMiddleware;
 use ExtendsFramework\Authorization\Framework\ServiceLocator\Factory\AuthorizerFactory;
 use ExtendsFramework\ServiceLocator\Resolver\Factory\FactoryResolver;
 use ExtendsFramework\ServiceLocator\Resolver\Reflection\ReflectionResolver;
@@ -30,7 +30,7 @@ class AuthorizationConfigLoaderTest extends TestCase
                     AuthorizerInterface::class => AuthorizerFactory::class,
                 ],
                 ReflectionResolver::class => [
-                    NotAuthorizedMiddleware::class => NotAuthorizedMiddleware::class,
+                    ForbiddenMiddleware::class => ForbiddenMiddleware::class,
                 ],
             ],
             AuthorizerInterface::class => [

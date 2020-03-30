@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Authorization\Framework\Http\Middleware;
 
+use ExtendsFramework\Authorization\Framework\ProblemDetails\ForbiddenProblemDetails;
 use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Logger\LoggerInterface;
@@ -16,8 +17,8 @@ class NotAuthorizedMiddlewareTest extends TestCase
      *
      * Test that authorization exception will be caught and a correct response will be returned.
      *
-     * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware::__construct()
-     * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\NotAuthorizedMiddleware::process()
+     * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\ForbiddenMiddleware::__construct()
+     * @covers \ExtendsFramework\Authorization\Framework\Http\Middleware\ForbiddenMiddleware::process()
      */
     public function testProcess(): void
     {
@@ -40,14 +41,13 @@ class NotAuthorizedMiddlewareTest extends TestCase
             ->willThrowException(new AuthorizationExceptionStub('Not authorized.'));
 
         /**
-         * @var RequestInterface         $request
+         * @var RequestInterface $request
          * @var MiddlewareChainInterface $chain
-         * @var LoggerInterface          $logger
+         * @var LoggerInterface $logger
          */
-        $middleware = new NotAuthorizedMiddleware($logger);
+        $middleware = new ForbiddenMiddleware($logger);
         $response = $middleware->process($request, $chain);
 
-        $this->assertIsObject($response);
-        $this->assertSame(403, $response->getStatusCode());
+        $this->assertInstanceOf(ForbiddenProblemDetails::class, $response->getBody());
     }
 }
