@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Authorization;
 
-use ExtendsFramework\Authorization\Exception\IdentityNotAssignedToRole;
-use ExtendsFramework\Authorization\Exception\IdentityNotPermitted;
 use ExtendsFramework\Authorization\Permission\PermissionInterface;
 use ExtendsFramework\Authorization\Realm\RealmInterface;
 use ExtendsFramework\Authorization\Role\RoleInterface;
@@ -35,15 +33,24 @@ class Authorizer implements AuthorizerInterface
     }
 
     /**
-     * @inheritDoc
+     * Get authorization information for $identity.
+     *
+     * When no authorization information can be found, an empty instance will be returned.
+     *
+     * @param IdentityInterface $identity
+     *
+     * @return AuthorizationInfoInterface
      */
-    public function checkPermission(IdentityInterface $identity, PermissionInterface $permission): AuthorizerInterface
+    private function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
     {
-        if (!$this->isPermitted($identity, $permission)) {
-            throw new IdentityNotPermitted();
+        foreach ($this->realms as $realm) {
+            $info = $realm->getAuthorizationInfo($identity);
+            if ($info instanceof AuthorizationInfoInterface) {
+                return $info;
+            }
         }
 
-        return $this;
+        return new AuthorizationInfo();
     }
 
     /**
@@ -62,21 +69,10 @@ class Authorizer implements AuthorizerInterface
     }
 
     /**
-     * @inheritDoc
-     */
-    public function checkRole(IdentityInterface $identity, RoleInterface $role): AuthorizerInterface
-    {
-        if (!$this->hasRole($identity, $role)) {
-            throw new IdentityNotAssignedToRole();
-        }
-
-        return $this;
-    }
-
-    /**
      * Add $realm to authorizer.
      *
      * @param RealmInterface $realm
+     *
      * @return Authorizer
      */
     public function addRealm(RealmInterface $realm): Authorizer
@@ -84,25 +80,5 @@ class Authorizer implements AuthorizerInterface
         $this->realms[] = $realm;
 
         return $this;
-    }
-
-    /**
-     * Get authorization information for $identity.
-     *
-     * When no authorization information can be found, an empty instance will be returned.
-     *
-     * @param IdentityInterface $identity
-     * @return AuthorizationInfoInterface
-     */
-    private function getAuthorizationInfo(IdentityInterface $identity): AuthorizationInfoInterface
-    {
-        foreach ($this->realms as $realm) {
-            $info = $realm->getAuthorizationInfo($identity);
-            if ($info instanceof AuthorizationInfoInterface) {
-                return $info;
-            }
-        }
-
-        return new AuthorizationInfo();
     }
 }

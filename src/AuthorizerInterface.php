@@ -19,18 +19,6 @@ interface AuthorizerInterface
     public function isPermitted(IdentityInterface $identity, PermissionInterface $permission): bool;
 
     /**
-     * Assume that $identity is permitted for $permission.
-     *
-     * When $identity is not permitted for $permission, and exception will be thrown.
-     *
-     * @param IdentityInterface   $identity
-     * @param PermissionInterface $permission
-     * @return AuthorizerInterface
-     * @throws AuthorizationException
-     */
-    public function checkPermission(IdentityInterface $identity, PermissionInterface $permission): AuthorizerInterface;
-
-    /**
      * Verify if $identity has $role.
      *
      * @param IdentityInterface $identity
@@ -38,16 +26,4 @@ interface AuthorizerInterface
      * @return bool
      */
     public function hasRole(IdentityInterface $identity, RoleInterface $role): bool;
-
-    /**
-     * Assume that $identity has $role.
-     *
-     * When $identity does not contains $role, and exception will be thrown.
-     *
-     * @param IdentityInterface $identity
-     * @param RoleInterface     $role
-     * @return AuthorizerInterface
-     * @throws AuthorizationException
-     */
-    public function checkRole(IdentityInterface $identity, RoleInterface $role): AuthorizerInterface;
 }
