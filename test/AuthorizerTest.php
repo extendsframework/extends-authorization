@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ExtendsFramework\Authorization;
 
 use ExtendsFramework\Authorization\Permission\PermissionInterface;
+use ExtendsFramework\Authorization\Policy\PolicyInterface;
 use ExtendsFramework\Authorization\Realm\RealmInterface;
 use ExtendsFramework\Authorization\Role\RoleInterface;
 use ExtendsFramework\Identity\IdentityInterface;
@@ -111,6 +112,34 @@ class AuthorizerTest extends TestCase
             ->hasRole($identity, $role);
 
         $this->assertTrue($hasRole);
+    }
+
+    /**
+     * Is allowed.
+     *
+     * Test that identity is allowed by policy.
+     *
+     * @covers \ExtendsFramework\Authorization\Authorizer::isAllowed()
+     */
+    public function testIsAllowed(): void
+    {
+        $identity = $this->createMock(IdentityInterface::class);
+
+        $policy = $this->createMock(PolicyInterface::class);
+        $policy
+            ->expects($this->once())
+            ->method('isAllowed')
+            ->with($identity)
+            ->willReturn(true);
+
+        /**
+         * @var IdentityInterface $identity
+         * @var PolicyInterface   $policy
+         */
+        $authorizer = new Authorizer();
+        $isAllowed = $authorizer->isAllowed($identity, $policy);
+
+        $this->assertTrue($isAllowed);
     }
 
     /**
