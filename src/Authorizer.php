@@ -53,7 +53,7 @@ class Authorizer implements AuthorizerInterface
      */
     public function isAllowed(IdentityInterface $identity, PolicyInterface $policy): bool
     {
-        return $policy->isAllowed($identity);
+        return $policy->isAllowed($identity, $this);
     }
 
     /**

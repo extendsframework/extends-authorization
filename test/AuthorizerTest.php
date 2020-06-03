@@ -129,7 +129,7 @@ class AuthorizerTest extends TestCase
         $policy
             ->expects($this->once())
             ->method('isAllowed')
-            ->with($identity)
+            ->with($identity, $this->isInstanceOf(AuthorizerInterface::class))
             ->willReturn(true);
 
         /**
